@@ -39,8 +39,13 @@ public class Ball extends Thread
 
     void changeDirection()
     {
-        if(endOfX()) xTransform *= -1;
-        if(endOfY()) yTransform *= -1;
+        xTransform *= -1;
+        yTransform *= -1;
+    }
+
+    boolean isTouchingPaddle(int xPaddle, int yPaddle)
+    {
+        return false;
     }
 
     @Override
@@ -48,7 +53,8 @@ public class Ball extends Thread
     {
         while(isWorking)
         {
-            changeDirection();
+            if(endOfX()) xTransform *= -1;
+            if(endOfY()) yTransform *= -1;
             move();
             panel.repaint();
             try

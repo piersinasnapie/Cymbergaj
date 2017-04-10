@@ -1,4 +1,4 @@
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -17,7 +17,7 @@ public class MainPanel extends JPanel
         setBackground(new Color(61, 24, 78));
 
         paddle = new Paddle(MainPanel.this);
-        paddle.start();
+//        paddle.start();
 
         addMouseMotionListener(new MouseAdapter()
         {
@@ -25,7 +25,11 @@ public class MainPanel extends JPanel
             public void mouseMoved(MouseEvent e)
             {
                 super.mouseMoved(e);
-                paddle.updatePosition(e.getX()+paddle.width/2,e.getY()+paddle.height/2);
+                paddle.updatePosition(e.getX()+Paddle.width/2,e.getY()+Paddle.height/2);
+                if(ball.isTouchingPaddle(e.getX(),e.getY()))
+                {
+                    ball.changeDirection();
+                }
             }
         });
 
@@ -40,6 +44,6 @@ public class MainPanel extends JPanel
         g.setColor(Color.WHITE);
         g.fillOval(ball.x,ball.y,ball.radius,ball.radius);
 
-        g.fillRect(paddle.x-paddle.width,paddle.y-paddle.height,paddle.width,paddle.height);
+        g.fillRect(paddle.x- Paddle.width,paddle.y- Paddle.height, Paddle.width, Paddle.height);
     }
 }

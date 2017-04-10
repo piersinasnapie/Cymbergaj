@@ -13,7 +13,7 @@ public class MainFrame extends JFrame
         setSize(width,height);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
-
+        System.out.println("witam");
         panel = new MainPanel();
         add(panel);
     }

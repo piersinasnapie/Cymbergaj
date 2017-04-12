@@ -1,19 +1,26 @@
 package plane;
 
+import objects2D.Puck;
+
 public class ObjectInCoordinateSystem implements Moveable
 {
     private Sprite sprite;
     private Point point;
 
-    ObjectInCoordinateSystem(Sprite sprite)
+    public ObjectInCoordinateSystem(Sprite sprite)
     {
-        this.sprite = sprite;
-        this.point = new Point();
+        this(sprite,new Point());
     }
 
-    Point getPoint(){ return this.point; }
-    double getWidth(){ return this.sprite.shape.width; }
-    double getHeight(){ return this.sprite.shape.height; }
+    public ObjectInCoordinateSystem(Sprite sprite, Point point)
+    {
+        this.sprite = sprite;
+        this.point = point;
+    }
+
+    public Point getPoint(){ return this.point; }
+    public double getWidth(){ return this.sprite.shape.width; }
+    public double getHeight(){ return this.sprite.shape.height; }
 
     @Override
     public double getVelocity()
@@ -37,5 +44,22 @@ public class ObjectInCoordinateSystem implements Moveable
     public void updateDirection(Vector vector)
     {
         this.sprite.physicalObject.vector = vector;
+    }
+
+    @Override
+    public Area getArea()
+    {
+        return new Area(point, sprite.shape.width, sprite.shape.height);
+    }
+
+    public String toString()
+    {
+        return "Object :: origin point: " + point + ",\n    " + sprite;
+    }
+
+    // test
+    public static void main(String[] args)
+    {
+        System.out.println(new ObjectInCoordinateSystem(new Sprite(new Puck(20))));
     }
 }

@@ -7,7 +7,7 @@ public class Vector
     double xEnd;
     double yEnd;
 
-    Vector()
+    public Vector()
     {
         this(0,0,0,0);
     }
@@ -20,14 +20,14 @@ public class Vector
         this.yEnd = yEnd;
     }
 
-    double length()
+    public double length()
     {
         double x = xEnd - xBegin;
         double y = yEnd - yBegin;
         return Math.sqrt(x*x + y*y);
     }
 
-    void multiply(double multiplier)
+    public void multiply(double multiplier)
     {
         this.xEnd = multiplier*(xEnd - xBegin) + xBegin;
         this.yEnd = multiplier*(yEnd - yBegin) + yBegin;

@@ -6,5 +6,5 @@ public abstract class Shape
 {
     protected double width;
     protected double height;
-    public abstract void draw(int x, int y, int width, int hight, Graphics g);
+    public abstract void draw(int x, int y, int width, int height, Graphics g);
 }

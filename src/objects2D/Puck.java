@@ -13,8 +13,8 @@ public class Puck extends Shape
     }
 
     @Override
-    public void draw(int x, int y, int width, int hight, Graphics g)
+    public void draw(int x, int y, int width, int height, Graphics g)
     {
-        g.fillOval(x, y, (int)this.width*width, (int)this.height*hight);
+        g.fillOval(x, y, (int)this.width*width, (int)this.height*height);
     }
 }

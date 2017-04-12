@@ -4,10 +4,10 @@ import java.awt.*;
 
 public class Paddle extends Shape
 {
-    Paddle()
+    Paddle(double width, double height)
     {
-        this.width = 20;
-        this.height = 5;
+        this.width = width;
+        this.height = height;
     }
 
     @Override

@@ -1,5 +1,10 @@
 package objects2D;
 
-public class Shape
+import java.awt.*;
+
+public abstract class Shape
 {
+    protected int width;
+    protected int height;
+    public abstract Graphics getGraphics();
 }

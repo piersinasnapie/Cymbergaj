@@ -15,10 +15,18 @@ public class Area {
     }
     public static boolean intersect(Area a, Area b)
     {
-
+        if(Area.canLinesBeIntersectedWithPerpendicularLine(a.origin,a.height,b.origin,b.height)&&Area.canLinesBeIntersectedWithPerpendicularLine(a.origin,a.width,b.origin,b.width))
+        {
+            return true;
+        }
+        return false;
     }
-    public static boolean canLinesBeIntersectWithPerpendicularLine(Point firstLineOrigin, double firstLineLength,Point secondLineOrigin, double secondLength)
+    public static boolean canLinesBeIntersectedWithPerpendicularLine(Point firstLineOrigin, double firstLineLength,Point secondLineOrigin, double secondLineLength)
     {
-        //nothing here
+        if((firstLineOrigin.getX()>=secondLineOrigin.getX()) && (firstLineOrigin.getX()+firstLineLength<=secondLineOrigin.getX()))
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -1,5 +1,7 @@
 package objects2D;
 
+import java.awt.*;
+
 public class Puck extends Shape
 {
     public static final double radius = 10;
@@ -11,8 +13,8 @@ public class Puck extends Shape
     }
 
     @Override
-    public Shape getShape()
+    public void draw(int x, int y, int width, int hight, Graphics g)
     {
-        return this;
+        g.fillOval(x, y, (int)this.width*width, (int)this.height*hight);
     }
 }

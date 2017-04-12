@@ -25,8 +25,8 @@ public class CoordinatePlane
         ArrayList<ObjectInCoordinateSystem> objectsInArea = new ArrayList<>();
         for(ObjectInCoordinateSystem objectOnPlane : this.objectsInPlane)
         {
-            //if(Area.intersect(objectOnPlane))
+            //if()
         }
-        
+        return objectsInArea;
     }
 }

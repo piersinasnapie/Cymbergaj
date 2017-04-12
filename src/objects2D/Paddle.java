@@ -15,5 +15,4 @@ public class Paddle extends Shape
     {
         g.fillRect(x, y, (int)this.width*width, (int)this.height*height );
     }
-
 }

@@ -2,7 +2,7 @@ package objects2D;
 
 public class Puck extends Shape
 {
-    public static double radius = 10;
+    public static final double radius = 10;
 
     Puck()
     {
@@ -11,7 +11,7 @@ public class Puck extends Shape
     }
 
     @Override
-    public Shape getGraphics()
+    public Shape getShape()
     {
         return this;
     }

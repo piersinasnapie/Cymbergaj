@@ -4,5 +4,5 @@ public abstract class Shape
 {
     protected double width;
     protected double height;
-    public abstract Shape getGraphics();
+    public abstract Shape getShape();
 }

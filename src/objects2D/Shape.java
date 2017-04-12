@@ -4,7 +4,7 @@ import java.awt.*;
 
 public abstract class Shape
 {
-    protected double width;
-    protected double height;
+    public double width;
+    public double height;
     public abstract void draw(int x, int y, int width, int height, Graphics g);
 }

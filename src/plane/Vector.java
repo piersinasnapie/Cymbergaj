@@ -1,6 +1,6 @@
 package plane;
 
-class Vector
+public class Vector
 {
     double xBegin;
     double yBegin;
@@ -9,10 +9,7 @@ class Vector
 
     Vector()
     {
-        this.xBegin = 0;
-        this.yBegin = 0;
-        this.xEnd = 0;
-        this.yEnd = 0;
+        this(0,0,0,0);
     }
 
     Vector(double xBegin, double yBegin, double xEnd, double yEnd)
@@ -41,6 +38,8 @@ class Vector
         return "begin = [" + xBegin + "," + yBegin + "], end = [" + xEnd + "," + yEnd + "]";
     }
 
+
+    // test
     public static void main(String[] args)
     {
         Vector v1 = new Vector(1,1,4,4);

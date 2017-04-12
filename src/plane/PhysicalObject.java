@@ -7,8 +7,7 @@ class PhysicalObject
 
     PhysicalObject()
     {
-        this.vector = new Vector();
-        velocity = vector.length();
+        this(new Vector());
     }
 
     PhysicalObject(Vector vector)

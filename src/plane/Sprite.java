@@ -2,15 +2,14 @@ package plane;
 
 import objects2D.Shape;
 
-public class Sprite
+class Sprite
 {
     Shape shape;
     PhysicalObject physicalObject;
 
     Sprite(Shape shape)
     {
-        this.shape = shape;
-        this.physicalObject = new PhysicalObject();
+        this(shape,new PhysicalObject());
     }
 
     Sprite(Shape shape, PhysicalObject physicalObject)

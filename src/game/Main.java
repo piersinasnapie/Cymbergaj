@@ -12,6 +12,7 @@ import plane.Vector;
 import render.Render;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Main
 {
@@ -19,13 +20,14 @@ public class Main
     {
         CoordinatePlane coordinatePlane = new CoordinatePlane();
 
-        Shape shape = new Puck(3);
+        Shape shape = new Puck(3, Color.blue);
+        Shape shape2 = new Puck(3, Color.red);
         Vector v = new Vector(1,1);
         PhysicalObject physicalObject = new PhysicalObject(v);
         PhysicalObject po2 = new PhysicalObject(new Vector(-1,-1));
 
         ObjectInCoordinateSystem object = new ObjectInCoordinateSystem(shape,physicalObject,new Point(0,0));
-        ObjectInCoordinateSystem object2 = new ObjectInCoordinateSystem(shape,po2,new Point(60,60));
+        ObjectInCoordinateSystem object2 = new ObjectInCoordinateSystem(shape2,po2,new Point(20,20));
 
         coordinatePlane.addObjectToPlane(object,object2);
 

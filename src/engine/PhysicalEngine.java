@@ -48,9 +48,9 @@ public class PhysicalEngine implements Runnable, Colider
         {
             while (isWorking)
             {
-                moveObjects();
                 searchColision();
-                Thread.sleep(20);
+                moveObjects();
+                Thread.sleep(200);
             }
         }
         catch (InterruptedException e){ e.printStackTrace(); }
@@ -80,6 +80,8 @@ public class PhysicalEngine implements Runnable, Colider
 
     void resolveColision(Moveable object1, Moveable object2)
     {
+
+
         object1.updateDirection(object1.getDirection().multiply(-1));
         object2.updateDirection(object2.getDirection().multiply(-1));
     }
@@ -94,7 +96,15 @@ public class PhysicalEngine implements Runnable, Colider
                 {
                     if (colisionDetected(object1, object2))
                     {
-                        resolveColision(object1, object2);
+                        System.out.println("COLISION COLISION COLISION COLISION COLISION COLISION ");
+                        synchronized(object1)
+                        {
+                            synchronized(object2)
+                            {
+                                resolveColision(object1, object2);
+
+                            }
+                        }
 
                         System.out.println("Colision detected for:  \n" + object1 + "\n" + object2);
                     }

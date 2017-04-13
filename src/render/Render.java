@@ -25,10 +25,10 @@ public class Render extends JPanel implements Runnable
 //        double factor = 0.1;
         while(true)
         {
-//            moveCamera(new plane.Vector(0.1,0.1));
+            moveCamera(new plane.Vector(0.1,0.5));
             repaint();
             try {
-                Thread.sleep(20);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -75,11 +75,11 @@ public class Render extends JPanel implements Runnable
     //TEST TEST TEST TEST TEST TEST TEST
     public static void main(String [] args)
     {
-        JFrame some = new JFrame("dd");
+        JFrame some = new JFrame("test");
         CoordinatePlane p = new CoordinatePlane();
-        p.addObjectToPlane(new ObjectInCoordinateSystem(new objects2D.Puck(2),new Point(2,3)));
-        p.addObjectToPlane(new ObjectInCoordinateSystem(new objects2D.Paddle(2.0,2.0),new Point(-1,-1)));
-        Render r = new Render(p,new Area(new Point(-15,-2),100,100),500,500);
+        p.addObjectToPlane(new ObjectInCoordinateSystem(new objects2D.Puck(2),new Point(0.1,0.1)));
+        p.addObjectToPlane(new ObjectInCoordinateSystem(new objects2D.Paddle(2.0,2.0),new Point(0.2,0.2)));
+        Render r = new Render(p,new Area(new Point(-10,-10),50,50),500,500);
         some.add(r);
         some.setVisible(true);
         some.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

@@ -36,11 +36,6 @@ public class PhysicalEngine implements Runnable, Colider
         return physicalEngine;
     }
 
-    void resolveColision(Moveable object1, Moveable object2)
-    {
-
-    }
-
     void calculateMotionCausedByUser(Moveable object)
     {
 
@@ -54,7 +49,7 @@ public class PhysicalEngine implements Runnable, Colider
             while (isWorking)
             {
                 moveObjects();
-//                searchColision();
+                searchColision();
                 Thread.sleep(20);
             }
         }
@@ -83,17 +78,26 @@ public class PhysicalEngine implements Runnable, Colider
         else object.setVelocity(0);
     }
 
+    void resolveColision(Moveable object1, Moveable object2)
+    {
+        object1.updateDirection(object1.getDirection().multiply(-1));
+        object2.updateDirection(object2.getDirection().multiply(-1));
+    }
+
     private void searchColision()
     {
         for (Moveable object1 : objects)
         {
             for (Moveable object2 : objects)
             {
-                if (colisionDetected(object1, object2))
+                if(object1 != object2)
                 {
-                    resolveColision(object1, object2);
+                    if (colisionDetected(object1, object2))
+                    {
+                        resolveColision(object1, object2);
 
-                    System.out.println("Colision detected for:  \n" + object1 + "\n" + object2);
+                        System.out.println("Colision detected for:  \n" + object1 + "\n" + object2);
+                    }
                 }
             }
         }

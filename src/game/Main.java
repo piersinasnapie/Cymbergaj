@@ -21,10 +21,11 @@ public class Main
 
         Shape shape = new Puck(3);
         Vector v = new Vector(1,1);
-        PhysicalObject physicalObject = new PhysicalObject(v,0.99995);
-        PhysicalObject po2 = new PhysicalObject(new Vector(-1,4),1.000003);
+        PhysicalObject physicalObject = new PhysicalObject(v);
+        PhysicalObject po2 = new PhysicalObject(new Vector(-1,-1));
+
         ObjectInCoordinateSystem object = new ObjectInCoordinateSystem(shape,physicalObject,new Point(0,0));
-        ObjectInCoordinateSystem object2 = new ObjectInCoordinateSystem(shape,po2,new Point(60,30));
+        ObjectInCoordinateSystem object2 = new ObjectInCoordinateSystem(shape,po2,new Point(60,60));
 
         coordinatePlane.addObjectToPlane(object,object2);
 

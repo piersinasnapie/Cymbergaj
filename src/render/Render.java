@@ -21,37 +21,43 @@ public class Render extends JPanel implements Runnable
     @Override
     public void run() {
         double factor = 0.1;
-        int iter=0;
         while(true)
         {
-
-            if(Math.abs(iter)>=50)
-            {
-                factor*=-1;
-                iter=0;
-            }
-            cameraSight.setOrigin(new plane.Point(cameraSight.getOrigin().getX()+factor,cameraSight.getOrigin().getY()));
+            moveCamera(new plane.Vector(0.1,0.1));
             repaint();
             try {
                 Thread.sleep(30);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            iter++;
         }
     }
-
+    void moveCamera(plane.Vector directionOfMovement)
+    {
+        cameraSight.setOrigin(new Point(cameraSight.getOrigin().getX()+directionOfMovement.getEndPoint().getX(),cameraSight.getOrigin().getY()+directionOfMovement.getEndPoint().getY()));
+    }
+    protected int getOnScreenPoisiton(double singleCoordinateRelativeToClipping, double clippingLenght, int screenLength)
+    {
+        return (int)((singleCoordinateRelativeToClipping/clippingLenght*(double)screenLength));
+    }
+    protected int lenghtInPixelsOnScreen(double lengthOfObj, int screenLenght)
+    {
+        return (int)(lengthOfObj*(double) screenLenght);
+    }
     protected void renderGraphics(Graphics g)
     {
         ArrayList<ObjectInCoordinateSystem> objectsSeenByCamera=planeToRender.getObjectsInArea(cameraSight);
         for(ObjectInCoordinateSystem objToRen: objectsSeenByCamera)
         {
-            Area coordinatesRelativeToCamera = new Area(objToRen.getPoint(),objToRen.getWidth(),objToRen.getHeight()).getRelativePosition(cameraSight);
-            int xOriginOnScreen = (int)((coordinatesRelativeToCamera.getOrigin().getX()/cameraSight.getWidth())*(double)this.screenResolution.getWidth());
-            int yOriginOnScreen = (int)((coordinatesRelativeToCamera.getOrigin().getY()/cameraSight.getHeight())*(double)this.screenResolution.getHeight());
-            int widthInPixels = (int)(coordinatesRelativeToCamera.getWidth()*(double)this.screenResolution.getWidth());
-            int heightInPixels = (int)(coordinatesRelativeToCamera.getHeight()*(double)this.screenResolution.getHeight());
-            objToRen.getShape().draw(xOriginOnScreen,yOriginOnScreen,widthInPixels,heightInPixels,g);
+            synchronized (objToRen)
+            {
+                Area coordinatesRelativeToCamera = new Area(objToRen.getPoint(),objToRen.getWidth(),objToRen.getHeight()).getRelativePosition(cameraSight);
+                int yOriginOnScreen = getOnScreenPoisiton(coordinatesRelativeToCamera.getOrigin().getY(),cameraSight.getHeight(),this.screenResolution.height);
+                int xOriginOnScreen = getOnScreenPoisiton(coordinatesRelativeToCamera.getOrigin().getX(),cameraSight.getWidth(),this.screenResolution.width);
+                int widthInPixels = lenghtInPixelsOnScreen(coordinatesRelativeToCamera.getWidth(),(int)screenResolution.getWidth());
+                int heightInPixels = lenghtInPixelsOnScreen(coordinatesRelativeToCamera.getHeight(),(int)screenResolution.getHeight());
+                objToRen.getShape().draw(xOriginOnScreen,yOriginOnScreen,widthInPixels,heightInPixels,g);
+            }
         }
     }
     int getAmountOfObjectsSeenBy(Area a)
@@ -71,7 +77,7 @@ public class Render extends JPanel implements Runnable
         CoordinatePlane p = new CoordinatePlane();
         p.addObjectToPlane(new ObjectInCoordinateSystem(new plane.Sprite(new objects2D.Puck(2)),new Point(2,3)));
         p.addObjectToPlane(new ObjectInCoordinateSystem(new plane.Sprite(new objects2D.Paddle(2.0,2.0)),new Point(-1,-1)));
-        Render r = new Render(p,new Area(new Point(-2,1.0),10,10),500,500);
+        Render r = new Render(p,new Area(new Point(-15,-2),100,100),500,500);
         some.add(r);
         some.setVisible(true);
         some.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

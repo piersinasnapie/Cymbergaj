@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class Puck extends Shape
 {
-    Puck(double radius)
+    public Puck(double radius)
     {
         this.width = radius;
         this.height = radius;

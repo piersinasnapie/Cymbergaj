@@ -5,16 +5,19 @@ public class ObjectInCoordinateSystem implements Moveable
     private Sprite sprite;
     private Point point;
 
-    ObjectInCoordinateSystem(Sprite sprite)
+   public  ObjectInCoordinateSystem(Sprite sprite)
+    {
+        this(sprite,new Point());
+    }
+    public ObjectInCoordinateSystem(Sprite sprite,Point point)
     {
         this.sprite = sprite;
-        this.point = new Point();
+        this.point = point;
     }
-
-    Point getPoint(){ return this.point; }
-    double getWidth(){ return this.sprite.shape.width; }
-    double getHeight(){ return this.sprite.shape.height; }
-
+    public Point getPoint(){ return this.point; }
+    public double getWidth(){ return this.sprite.shape.width; }
+    public double getHeight(){ return this.sprite.shape.height; }
+    public objects2D.Shape getShape(){return sprite.shape;}
     @Override
     public double getVelocity()
     {
@@ -28,10 +31,7 @@ public class ObjectInCoordinateSystem implements Moveable
     }
 
     @Override
-    public void updateVelocity(double velocity)
-    {
-        this.sprite.physicalObject.velocity = velocity;
-    }
+    public void updateVelocity(double velocity){this.sprite.physicalObject.velocity = velocity;}
 
     @Override
     public void updateDirection(Vector vector)

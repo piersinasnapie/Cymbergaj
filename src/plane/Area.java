@@ -22,11 +22,35 @@ public class Area {
         return ((fLineOrigin >= sLineOrigin) && (fLineOrigin <= sLineOrigin + sLineLength))
                 || ((sLineOrigin >= fLineOrigin) && (sLineOrigin <= fLineOrigin + fLineLength));
     }
-
+    @Override
+    public String toString()
+    {
+        return "x: "+this.getOrigin().getX()+" y: "+this.getOrigin().getY()+" w: "+this.width+" h: "+this.height;
+    }
+    public double getWidth()
+    {
+        return this.width;
+    }
+    public double getHeight()
+    {
+        return this.height;
+    }
+    public Point getOrigin()
+    {
+        return this.origin;
+    }
+    public void setOrigin(Point p){this.origin=p;}
+    public Area getRelativePosition(Area toObject)
+    {
+        Point newOrigin = new Point(this.origin.getX()-toObject.getOrigin().getX(),this.getOrigin().getY());
+        double width = this.width/toObject.width;
+        double height = this.height/toObject.height;
+        return new Area(newOrigin,width,height);
+    }
     public static void main(String [] args)
     {
-        Area a = new Area(new Point(101,0),50,50);
-        Area b = new Area(new Point(0,0),100,100);
+        Area a = new Area(new Point(-2,2),2,2);
+        Area b = new Area(new Point(0,1),1,1);
         System.out.println(intersect(a,b));
     }
 }

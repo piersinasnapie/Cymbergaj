@@ -9,18 +9,18 @@ import java.util.ArrayList;
 public class CoordinatePlane
 {
     protected ArrayList<ObjectInCoordinateSystem> objectsInPlane;
-    CoordinatePlane()
+    public CoordinatePlane()
     {
         this.objectsInPlane=new ArrayList<>();
     }
-    void addObjectToPlane(ObjectInCoordinateSystem objectToAdd){
+    public void addObjectToPlane(ObjectInCoordinateSystem objectToAdd){
         this.objectsInPlane.add(objectToAdd);
     }
-    ArrayList<ObjectInCoordinateSystem> getObjectsInPlane()
+    public ArrayList<ObjectInCoordinateSystem> getObjectsInPlane()
     {
         return this.objectsInPlane;
     }
-    ArrayList<ObjectInCoordinateSystem> getObjectsInArea(Area a)
+    public ArrayList<ObjectInCoordinateSystem> getObjectsInArea(Area a)
     {
         ArrayList<ObjectInCoordinateSystem> objectsInArea = new ArrayList<>();
         for(ObjectInCoordinateSystem objectToExaminate : this.objectsInPlane)

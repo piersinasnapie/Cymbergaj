@@ -1,15 +1,11 @@
 package engine;
 
 import objects2D.Puck;
-import plane.Area;
-import plane.CoordinatePlane;
-import plane.Moveable;
-import plane.ObjectInCoordinateSystem;
-import plane.PhysicalObject;
-import plane.Point;
-import plane.Vector;
+import plane.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PhysicalEngine implements Runnable, Colider
 {
@@ -48,8 +44,8 @@ public class PhysicalEngine implements Runnable, Colider
         {
             while (isWorking)
             {
-                moveObjects();
                 searchColision();
+                moveObjects();
                 Thread.sleep(20);
             }
         }
@@ -80,23 +76,37 @@ public class PhysicalEngine implements Runnable, Colider
 
     void resolveColision(Moveable object1, Moveable object2)
     {
+
+
         object1.updateDirection(object1.getDirection().multiply(-1));
         object2.updateDirection(object2.getDirection().multiply(-1));
     }
 
     private void searchColision()
     {
+        Map<Moveable,Boolean> resolvedCollisionMap = new HashMap<>();
+        for(Moveable moveableObject : objects)
+        {
+            resolvedCollisionMap.put(moveableObject,false);
+        }
         for (Moveable object1 : objects)
         {
             for (Moveable object2 : objects)
             {
                 if(object1 != object2)
                 {
-                    if (colisionDetected(object1, object2))
+                    if (colisionDetected(object1, object2) && resolvedCollisionMap.get(object1)!=true && resolvedCollisionMap.get(object2)!=true)
                     {
-                        resolveColision(object1, object2);
-
-                        System.out.println("Colision detected for:  \n" + object1 + "\n" + object2);
+                        System.out.println("COLISION COLISION COLISION COLISION COLISION COLISION ");
+                        synchronized(object1)
+                        {
+                            synchronized(object2)
+                            {
+                                resolveColision(object1, object2);
+                                resolvedCollisionMap.replace(object1, true);
+                                resolvedCollisionMap.replace(object2, true);
+                            }
+                        }
                     }
                 }
             }

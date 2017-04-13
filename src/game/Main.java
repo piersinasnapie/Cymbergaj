@@ -3,15 +3,12 @@ package game;
 import engine.PhysicalEngine;
 import objects2D.Puck;
 import objects2D.Shape;
-import plane.Area;
-import plane.CoordinatePlane;
-import plane.ObjectInCoordinateSystem;
-import plane.PhysicalObject;
+import plane.*;
 import plane.Point;
-import plane.Vector;
 import render.Render;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Main
 {
@@ -19,17 +16,23 @@ public class Main
     {
         CoordinatePlane coordinatePlane = new CoordinatePlane();
 
-        Shape shape = new Puck(3);
-        Vector v = new Vector(1,1);
+
+
+//        Shape shape = new Paddle(3,3,Color.BLUE);
+//        Shape shape2 = new Paddle(3,3,Color.red);
+
+        Shape shape = new Puck(3, Color.blue);
+        Shape shape2 = new Puck(3, Color.red);
+        Vector v = new Vector(0.1,0.1);
         PhysicalObject physicalObject = new PhysicalObject(v);
-        PhysicalObject po2 = new PhysicalObject(new Vector(-1,-1));
+        PhysicalObject po2 = new PhysicalObject(new Vector(-0.1,-0.1));
 
         ObjectInCoordinateSystem object = new ObjectInCoordinateSystem(shape,physicalObject,new Point(0,0));
-        ObjectInCoordinateSystem object2 = new ObjectInCoordinateSystem(shape,po2,new Point(60,60));
+        ObjectInCoordinateSystem object2 = new ObjectInCoordinateSystem(shape2,po2,new Point(20,20));
 
         coordinatePlane.addObjectToPlane(object,object2);
 
-        Render render = new Render(coordinatePlane,new Area(new Point(0,0),300,300),600,600);
+        Render render = new Render(coordinatePlane,new Area(new Point(-5,-5),30,30),600,600);
 
         Thread engineThread = new Thread(PhysicalEngine.getPhysicalEngine(coordinatePlane));
         Thread renderThread = new Thread(render);

@@ -4,7 +4,6 @@ package plane;
  * Created by mateusz on 12/04/2017.
  */
 
-//Origin points to left-upper corner of sprite
 public class Point {
     protected double x;
     protected double y;

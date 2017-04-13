@@ -51,9 +51,9 @@ public class Vector
     // test
     public static void main(String[] args)
     {
-        Vector v1 = new Vector(1,1,4,4);
+        Vector v1 = new Vector(0,0,4,4);
         System.out.println(v1 + ", " + v1.length());
-        v1.multiply(2);
+        v1.multiply(-1);
         System.out.println(v1 + ", " + v1.length());
     }
 }

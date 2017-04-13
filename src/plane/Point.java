@@ -17,11 +17,11 @@ public class Point {
     {
         this(0,0);
     }
+
     public double getX()
     {
         return x;
     }
-
     public void setX(double x)
     {
         this.x = x;
@@ -33,5 +33,16 @@ public class Point {
     public void setY(double y)
     {
         this.y = y;
+    }
+
+    public String toString()
+    {
+        return "(" + x + "," + y + ")";
+    }
+
+    // test
+    public static void main(String[] args)
+    {
+        System.out.println(new Point(1,2));
     }
 }

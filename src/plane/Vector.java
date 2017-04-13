@@ -35,10 +35,12 @@ public class Vector
         this.xEnd = multiplier*(xEnd - xBegin) + xBegin;
         this.yEnd = multiplier*(yEnd - yBegin) + yBegin;
     }
+
     public plane.Point getEndPoint()
     {
         return new plane.Point(this.xEnd,this.yEnd);
     }
+
     public String toString()
     {
         return "begin = [" + xBegin + "," + yBegin + "], end = [" + xEnd + "," + yEnd + "]";

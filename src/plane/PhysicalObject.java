@@ -1,25 +1,27 @@
 package plane;
 
-class PhysicalObject
+public class PhysicalObject
 {
-    double velocity;
     Vector vector;
+    double slowingDownRatio;
 
-    PhysicalObject()
+    public PhysicalObject()
     {
-        this(new Vector());
+        this(new Vector(),1);
     }
 
-    PhysicalObject(Vector vector)
+    public PhysicalObject(Vector vector) { this(vector,1); }
+
+    public PhysicalObject(Vector vector, double slowingDownRatio)
     {
         this.vector = vector;
-        velocity = vector.length();
+        this.slowingDownRatio = slowingDownRatio;
     }
 
     @Override
     public String toString()
     {
-        return "v= " + velocity + ", " + vector;
+        return "v= " +vector.length() + ", " + vector;
     }
 
     // test

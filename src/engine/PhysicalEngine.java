@@ -5,8 +5,9 @@ import plane.Area;
 import plane.CoordinatePlane;
 import plane.Moveable;
 import plane.ObjectInCoordinateSystem;
+import plane.PhysicalObject;
 import plane.Point;
-import plane.Sprite;
+import plane.Vector;
 
 import java.util.ArrayList;
 
@@ -29,7 +30,7 @@ public class PhysicalEngine implements Runnable, Colider
     }
 
 
-    static PhysicalEngine getPhysicalEngine(CoordinatePlane coordinatePlane)
+    public static PhysicalEngine getPhysicalEngine(CoordinatePlane coordinatePlane)
     {
         if(physicalEngine == null) return new PhysicalEngine(coordinatePlane);
         return physicalEngine;
@@ -52,11 +53,34 @@ public class PhysicalEngine implements Runnable, Colider
         {
             while (isWorking)
             {
-                searchColision();
-                Thread.sleep(2000);
+                moveObjects();
+//                searchColision();
+                Thread.sleep(20);
             }
         }
         catch (InterruptedException e){ e.printStackTrace(); }
+    }
+
+    void moveObjects()
+    {
+        for(Moveable object : objects)
+        {
+            synchronized (object)
+            {
+                object.updatePoint(object.getPoint().add(object.getDirection().getEndPoint()));
+                slowDownObject(object);
+                System.out.println(object);
+            }
+        }
+    }
+
+    void slowDownObject(Moveable object)
+    {
+        if(object.getVelocity() > 0.01)
+        {
+            object.updateVelocity();
+        }
+        else object.setVelocity(0);
     }
 
     private void searchColision()
@@ -93,10 +117,12 @@ public class PhysicalEngine implements Runnable, Colider
     {
         CoordinatePlane cp = new CoordinatePlane();
 
-        ObjectInCoordinateSystem object1 = new ObjectInCoordinateSystem(new Sprite(new Puck(20)));
-        ObjectInCoordinateSystem object2 = new ObjectInCoordinateSystem(new Sprite(new Puck(20)), new Point(5,5));
+//        ObjectInCoordinateSystem object1 = new ObjectInCoordinateSystem(new Puck(20));
+        ObjectInCoordinateSystem object2 = new ObjectInCoordinateSystem(new Puck(20), new PhysicalObject(new Vector(1,1),0.9), new Point(5,5));
 
-        cp.addObjectToPlane(object1,object2);
+//        cp.addObjectToPlane(object1,object2);
+
+        cp.addObjectToPlane(object2);
 
         new Thread(PhysicalEngine.getPhysicalEngine(cp)).start();
     }

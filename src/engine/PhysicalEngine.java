@@ -1,15 +1,11 @@
 package engine;
 
 import objects2D.Puck;
-import plane.Area;
-import plane.CoordinatePlane;
-import plane.Moveable;
-import plane.ObjectInCoordinateSystem;
-import plane.PhysicalObject;
-import plane.Point;
-import plane.Vector;
+import plane.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PhysicalEngine implements Runnable, Colider
 {
@@ -50,7 +46,7 @@ public class PhysicalEngine implements Runnable, Colider
             {
                 searchColision();
                 moveObjects();
-                Thread.sleep(200);
+                Thread.sleep(20);
             }
         }
         catch (InterruptedException e){ e.printStackTrace(); }
@@ -88,13 +84,18 @@ public class PhysicalEngine implements Runnable, Colider
 
     private void searchColision()
     {
+        Map<Moveable,Boolean> resolvedCollisionMap = new HashMap<>();
+        for(Moveable moveableObject : objects)
+        {
+            resolvedCollisionMap.put(moveableObject,false);
+        }
         for (Moveable object1 : objects)
         {
             for (Moveable object2 : objects)
             {
                 if(object1 != object2)
                 {
-                    if (colisionDetected(object1, object2))
+                    if (colisionDetected(object1, object2) && resolvedCollisionMap.get(object1)!=true && resolvedCollisionMap.get(object2)!=true)
                     {
                         System.out.println("COLISION COLISION COLISION COLISION COLISION COLISION ");
                         synchronized(object1)
@@ -102,11 +103,10 @@ public class PhysicalEngine implements Runnable, Colider
                             synchronized(object2)
                             {
                                 resolveColision(object1, object2);
-
+                                resolvedCollisionMap.replace(object1, true);
+                                resolvedCollisionMap.replace(object2, true);
                             }
                         }
-
-                        System.out.println("Colision detected for:  \n" + object1 + "\n" + object2);
                     }
                 }
             }

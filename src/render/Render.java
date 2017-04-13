@@ -25,10 +25,10 @@ public class Render extends JPanel implements Runnable
 //        double factor = 0.1;
         while(true)
         {
-            moveCamera(new plane.Vector(0.1,0.5));
+           // moveCamera(new plane.Vector(0.1,0.5));
             repaint();
             try {
-                Thread.sleep(500);
+                Thread.sleep(20);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

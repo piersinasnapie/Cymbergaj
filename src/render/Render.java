@@ -1,6 +1,8 @@
 package render;
 
-import plane.*;
+import plane.Area;
+import plane.CoordinatePlane;
+import plane.ObjectInCoordinateSystem;
 import plane.Point;
 
 import javax.swing.*;
@@ -12,7 +14,7 @@ public class Render extends JPanel implements Runnable
     protected CoordinatePlane planeToRender;
     protected plane.Area cameraSight;
     protected Dimension screenResolution;
-    Render(CoordinatePlane plane, plane.Area camera, int xRes, int yRes)
+    public Render(CoordinatePlane plane, plane.Area camera, int xRes, int yRes)
     {
         this.planeToRender=plane;
         this.cameraSight=camera;
@@ -20,13 +22,13 @@ public class Render extends JPanel implements Runnable
     }
     @Override
     public void run() {
-        double factor = 0.1;
+//        double factor = 0.1;
         while(true)
         {
-            moveCamera(new plane.Vector(0.1,0.1));
+//            moveCamera(new plane.Vector(0.1,0.1));
             repaint();
             try {
-                Thread.sleep(30);
+                Thread.sleep(20);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -75,8 +77,8 @@ public class Render extends JPanel implements Runnable
     {
         JFrame some = new JFrame("dd");
         CoordinatePlane p = new CoordinatePlane();
-        p.addObjectToPlane(new ObjectInCoordinateSystem(new plane.Sprite(new objects2D.Puck(2)),new Point(2,3)));
-        p.addObjectToPlane(new ObjectInCoordinateSystem(new plane.Sprite(new objects2D.Paddle(2.0,2.0)),new Point(-1,-1)));
+        p.addObjectToPlane(new ObjectInCoordinateSystem(new objects2D.Puck(2),new Point(2,3)));
+        p.addObjectToPlane(new ObjectInCoordinateSystem(new objects2D.Paddle(2.0,2.0),new Point(-1,-1)));
         Render r = new Render(p,new Area(new Point(-15,-2),100,100),500,500);
         some.add(r);
         some.setVisible(true);

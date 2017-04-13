@@ -1,65 +1,91 @@
 package plane;
 
 import objects2D.Puck;
+import objects2D.Shape;
 
 public class ObjectInCoordinateSystem implements Moveable
 {
-    private Sprite sprite;
+    private Shape shape;
+    private PhysicalObject physicalObject;
     private Point point;
 
-
-    public ObjectInCoordinateSystem(Sprite sprite)
+    public ObjectInCoordinateSystem(Shape shape)
     {
-        this(sprite,new Point());
+        this(shape,new PhysicalObject(), new Point());
     }
 
-    public ObjectInCoordinateSystem(Sprite sprite, Point point)
-
+    public ObjectInCoordinateSystem(Shape shape, Point point)
     {
-        this.sprite = sprite;
+        this(shape, new PhysicalObject(), point);
+    }
+
+    public ObjectInCoordinateSystem(Shape shape, PhysicalObject physicalObject, Point point)
+    {
+        this.shape = shape;
+        this.physicalObject = physicalObject;
         this.point = point;
     }
 
-    public Point getPoint(){ return this.point; }
-    public double getWidth(){ return this.sprite.shape.width; }
-    public double getHeight(){ return this.sprite.shape.height; }
-    public objects2D.Shape getShape(){return sprite.shape;}
+    public double getWidth(){ return this.shape.width; }
+    public double getHeight(){ return this.shape.height; }
+    public objects2D.Shape getShape(){return shape;}
+
+    @Override
+    public void updatePoint(Point point)
+    {
+        this.point = point;
+    }
+
+    @Override
+    public Point getPoint()
+    {
+        return this.point;
+    }
 
     @Override
     public double getVelocity()
     {
-        return sprite.physicalObject.velocity;
+        return physicalObject.vector.length();
     }
 
     @Override
     public Vector getDirection()
     {
-        return sprite.physicalObject.vector;
+        return physicalObject.vector;
     }
 
     @Override
-    public void updateVelocity(double velocity){this.sprite.physicalObject.velocity = velocity;}
+    public void updateVelocity()
+    {
+        this.physicalObject.vector.multiply(physicalObject.slowingDownRatio);
+    }
+
+    @Override
+    public void setVelocity(double v)
+    {
+        this.physicalObject.vector.multiply(v);
+    }
 
     @Override
     public void updateDirection(Vector vector)
     {
-        this.sprite.physicalObject.vector = vector;
+        this.physicalObject.vector = vector;
     }
 
     @Override
     public Area getArea()
     {
-        return new Area(point, sprite.shape.width, sprite.shape.height);
+        return new Area(point,shape.width,shape.height);
     }
 
     public String toString()
     {
-        return "Object :: origin point: " + point + ",\n    " + sprite;
+        return "Object :: origin point: " + point + ",\n    " + physicalObject;
     }
 
     // test
     public static void main(String[] args)
     {
-        System.out.println(new ObjectInCoordinateSystem(new Sprite(new Puck(20))));
+        System.out.println(new ObjectInCoordinateSystem((new Puck(20))));
     }
 }

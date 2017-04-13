@@ -40,6 +40,13 @@ public class Point {
         return "(" + x + "," + y + ")";
     }
 
+    public Point add(Point point)
+    {
+        this.x += point.x;
+        this.y += point.y;
+        return this;
+    }
+
     // test
     public static void main(String[] args)
     {

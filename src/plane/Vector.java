@@ -30,15 +30,18 @@ public class Vector
         return Math.sqrt(x*x + y*y);
     }
 
-    public void multiply(double multiplier)
+    public Vector multiply(double multiplier)
     {
         this.xEnd = multiplier*(xEnd - xBegin) + xBegin;
         this.yEnd = multiplier*(yEnd - yBegin) + yBegin;
+        return this;
     }
+
     public plane.Point getEndPoint()
     {
         return new plane.Point(this.xEnd,this.yEnd);
     }
+
     public String toString()
     {
         return "begin = [" + xBegin + "," + yBegin + "], end = [" + xEnd + "," + yEnd + "]";

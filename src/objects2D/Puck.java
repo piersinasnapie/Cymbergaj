@@ -4,7 +4,6 @@ import java.awt.*;
 
 public class Puck extends Shape
 {
-
     public Puck(double radius)
     {
         this(radius,Color.blue);
@@ -13,14 +12,14 @@ public class Puck extends Shape
     {
         this.width = radius;
         this.height = radius;
-        this.shapeColor=shapeColor;
+        this.shapeColor = shapeColor;
     }
     @Override
     public void draw(int x, int y, int width, int height, Graphics g)
     {
         Color last = g.getColor();
         g.setColor(this.shapeColor);
-        g.fillOval(x, y, (int)this.width*width, (int)this.height*height);
+        g.fillOval(x, y, width, height);
         g.setColor(last);
     }
 }

@@ -1,5 +1,6 @@
 package plane;
 
+import objects2D.Puck;
 import objects2D.Shape;
 
 public class Sprite
@@ -16,5 +17,17 @@ public class Sprite
     {
         this.shape = shape;
         this.physicalObject = physicalObject;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Sprite: " + physicalObject;
+    }
+
+    // test
+    public static void main(String[] args)
+    {
+        System.out.println(new Sprite(new Puck(20)));
     }
 }

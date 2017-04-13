@@ -6,4 +6,5 @@ public interface Moveable
     Vector getDirection();
     void updateVelocity(double velocity);
     void updateDirection(Vector vector);
+    Area getArea();
 }

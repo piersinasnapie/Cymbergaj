@@ -2,17 +2,17 @@ package objects2D;
 
 import java.awt.*;
 
-public class Paddle extends Shape
+public class Obstacle extends Shape
 {
-    public Paddle(double width, double height)
+    public Obstacle(double width, double height)
     {
         this(width,height,Color.magenta);
     }
-    public Paddle(double width, double height, Color shapeColor)
+    public Obstacle(double width, double height, Color shapeColor)
     {
-        this.width = width;
-        this.height = height;
-        this.shapeColor = shapeColor;
+        this.width = 0.5*width;
+        this.height = 0.5*height;
+        this.shapeColor=shapeColor;
     }
     @Override
     public void draw(int x, int y, int width, int height, Graphics g)

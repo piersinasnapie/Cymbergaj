@@ -1,7 +1,5 @@
 package plane;
 
-import java.awt.*;
-
 /**
  * Created by mateusz on 12/04/2017.
  */
@@ -25,8 +23,8 @@ public class Area {
     }
     public static boolean intersectLines(double fLineOrigin, double fLineLength,double sLineOrigin, double sLineLength)
     {
-        return ((fLineOrigin > sLineOrigin) && (fLineOrigin < sLineOrigin + sLineLength))
-                || ((sLineOrigin > fLineOrigin) && (sLineOrigin < fLineOrigin + fLineLength));
+        return ((fLineOrigin >= sLineOrigin) && (fLineOrigin <= sLineOrigin + sLineLength))
+                || ((sLineOrigin >= fLineOrigin) && (sLineOrigin <= fLineOrigin + fLineLength));
     }
 
 

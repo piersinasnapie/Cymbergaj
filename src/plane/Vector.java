@@ -23,6 +23,14 @@ public class Vector
         this.yEnd = yEnd;
     }
 
+    public Vector(Point begin, Point end)
+    {
+        this.xBegin = begin.getX();
+        this.yBegin = begin.getY();
+        this.xEnd = end.getX();
+        this.yEnd = end.getY();
+    }
+
     public double length()
     {
         double x = xEnd - xBegin;

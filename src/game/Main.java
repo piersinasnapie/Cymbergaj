@@ -41,6 +41,7 @@ public class Main
 
         Thread engineThread = new Thread(PhysicalEngine.getPhysicalEngine(coordinatePlane));
         Thread renderThread = new Thread(render);
+        Thread mouseThread = new Thread(render.mouseMotionSpeed);
 
         JFrame window = new JFrame("TEST 1");
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -53,6 +54,7 @@ public class Main
             Thread.sleep(1000);
             engineThread.start();
             renderThread.start();
+            mouseThread.start();
         }
         catch (InterruptedException e){ e.printStackTrace(); }
     }

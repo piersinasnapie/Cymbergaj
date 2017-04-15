@@ -31,6 +31,14 @@ public class Vector
         this.yEnd = end.getY();
     }
 
+    public Vector(Vector vector)
+    {
+        this.xBegin = vector.xBegin;
+        this.yBegin = vector.yBegin;
+        this.xEnd = vector.xEnd;
+        this.yEnd = vector.yEnd;
+    }
+
     public double length()
     {
         double x = xEnd - xBegin;
@@ -42,6 +50,27 @@ public class Vector
     {
         this.xEnd = multiplier*(xEnd - xBegin) + xBegin;
         this.yEnd = multiplier*(yEnd - yBegin) + yBegin;
+        return this;
+    }
+
+    public Vector getXComponent() { return new Vector(xBegin,0,xEnd,0); }
+    public Vector getYComponent() { return new Vector(0,yBegin,0,yEnd); }
+
+    public static Vector add(Vector v1, Vector v2)
+    {
+        double xBegin = v1.xBegin;
+        double yBegin = v1.yBegin;
+
+        double xEnd = v1.xEnd + v2.getXComponent().length();
+        double yEnd = v1.yEnd + v2.getYComponent().length();
+
+        return new Vector(xBegin,yBegin,xEnd,yEnd);
+    }
+
+    public Vector add(Vector vector)
+    {
+        this.xEnd += vector.getXComponent().length();
+        this.yEnd += vector.getYComponent().length();
         return this;
     }
 
@@ -59,9 +88,13 @@ public class Vector
     // test
     public static void main(String[] args)
     {
-        Vector v1 = new Vector(0,0,4,4);
-        System.out.println(v1 + ", " + v1.length());
-        v1.multiply(-1);
-        System.out.println(v1 + ", " + v1.length());
+        Vector bigVector = new Vector(0,0,5,5);
+
+        System.out.println(bigVector.getXComponent());
+        System.out.println(bigVector.getYComponent());
+
+        Vector v2 = new Vector(1,1,2,1);
+
+        System.out.println(bigVector.add(v2));
     }
 }

@@ -3,7 +3,7 @@ package plane;
 import objects2D.Puck;
 import objects2D.Shape;
 
-public class ObjectInCoordinateSystem implements Moveable
+public class ObjectInCoordinateSystem implements Movable
 {
     private Shape shape;
     private PhysicalObject physicalObject;
@@ -28,7 +28,7 @@ public class ObjectInCoordinateSystem implements Moveable
 
     public double getWidth(){ return this.shape.width; }
     public double getHeight(){ return this.shape.height; }
-    public objects2D.Shape getShape(){return shape;}
+
 
     @Override
     public void updatePoint(Point point)
@@ -76,6 +76,12 @@ public class ObjectInCoordinateSystem implements Moveable
     public Area getArea()
     {
         return new Area(point,shape.width,shape.height);
+    }
+
+    @Override
+    public Shape getShape()
+    {
+        return this.shape;
     }
 
     public String toString()

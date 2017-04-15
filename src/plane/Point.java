@@ -17,6 +17,11 @@ public class Point {
         this(0,0);
     }
 
+    public Point(Point point)
+    {
+        this(point.x, point.y);
+    }
+
     public double getX()
     {
         return x;

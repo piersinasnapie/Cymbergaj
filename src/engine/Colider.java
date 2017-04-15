@@ -1,8 +1,8 @@
 package engine;
 
-import plane.Moveable;
+import plane.Movable;
 
 public interface Colider
 {
-    boolean colisionDetected(Moveable object1, Moveable object2);
+    boolean colisionDetected(Movable object1, Movable object2);
 }

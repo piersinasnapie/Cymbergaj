@@ -1,7 +1,13 @@
 package engine;
 
 import objects2D.Puck;
-import plane.*;
+import plane.Area;
+import plane.CoordinatePlane;
+import plane.Movable;
+import plane.ObjectInCoordinateSystem;
+import plane.PhysicalObject;
+import plane.Point;
+import plane.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +17,7 @@ public class PhysicalEngine implements Runnable, Colider
 {
     private boolean isWorking;
 
-    ArrayList<Moveable> objects;
+    ArrayList<Movable> objects;
 
     private static PhysicalEngine physicalEngine = null;
 
@@ -22,16 +28,10 @@ public class PhysicalEngine implements Runnable, Colider
         this.isWorking = true;
     }
 
-
     public static PhysicalEngine getPhysicalEngine(CoordinatePlane coordinatePlane)
     {
         if(physicalEngine == null) return new PhysicalEngine(coordinatePlane);
         return physicalEngine;
-    }
-
-    void calculateMotionCausedByUser(Moveable object)
-    {
-
     }
 
     @Override
@@ -51,7 +51,7 @@ public class PhysicalEngine implements Runnable, Colider
 
     void moveObjects()
     {
-        for(Moveable object : objects)
+        for(Movable object : objects)
         {
             synchronized (object)
             {
@@ -61,7 +61,7 @@ public class PhysicalEngine implements Runnable, Colider
         }
     }
 
-    void slowDownObject(Moveable object)
+    void slowDownObject(Movable object)
     {
         if(object.getVelocity() > 0.01)
         {
@@ -70,28 +70,26 @@ public class PhysicalEngine implements Runnable, Colider
         else object.setVelocity(0);
     }
 
-    void resolveColision(Moveable object1, Moveable object2)
+    void resolveColision(Movable object1, Movable object2)
     {
-
-
         object1.updateDirection(object1.getDirection().multiply(-1));
         object2.updateDirection(object2.getDirection().multiply(-1));
     }
 
     private void searchColision()
     {
-        Map<Moveable,Boolean> resolvedCollisionMap = new HashMap<>();
-        for(Moveable moveableObject : objects)
+        Map<Movable,Boolean> resolvedCollisionMap = new HashMap<>();
+        for(Movable movableObject : objects)
         {
-            resolvedCollisionMap.put(moveableObject,false);
+            resolvedCollisionMap.put(movableObject,false);
         }
-        for (Moveable object1 : objects)
+        for (Movable object1 : objects)
         {
-            for (Moveable object2 : objects)
+            for (Movable object2 : objects)
             {
                 if(object1 != object2)
                 {
-                    if (colisionDetected(object1, object2) && resolvedCollisionMap.get(object1)!=true && resolvedCollisionMap.get(object2)!=true)
+                    if (colisionDetected(object1, object2) && !resolvedCollisionMap.get(object1) && !resolvedCollisionMap.get(object2))
                     {
                         System.out.println("†††\nCOLISION COLISION COLISION COLISION COLISION COLISION \n†††");
                         synchronized(object1)
@@ -112,7 +110,7 @@ public class PhysicalEngine implements Runnable, Colider
     }
 
     @Override
-    public boolean colisionDetected(Moveable object1, Moveable object2)
+    public boolean colisionDetected(Movable object1, Movable object2)
     {
         synchronized (object1)
         {

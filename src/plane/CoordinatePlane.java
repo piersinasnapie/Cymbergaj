@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class CoordinatePlane
 {
+    public static final double maxVectorLength = 1;
     protected ArrayList<ObjectInCoordinateSystem> objectsInPlane;
 
     public CoordinatePlane()
@@ -28,7 +29,7 @@ public class CoordinatePlane
         ArrayList<ObjectInCoordinateSystem> objectsInArea = new ArrayList<>();
         for(ObjectInCoordinateSystem objectToExaminate : this.objectsInPlane)
         {
-            if(Area.intersect(new Area(objectToExaminate.getPoint(),objectToExaminate.getWidth(),objectToExaminate.getHeight()),a)==true)
+            if(Area.intersect(new Area(objectToExaminate.getPoint(), objectToExaminate.getWidth(), objectToExaminate.getHeight()), a))
             {
                 objectsInArea.add(objectToExaminate);
             }

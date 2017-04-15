@@ -12,32 +12,110 @@ import java.util.ArrayList;
 
 public class Render extends JPanel implements Runnable
 {
+    private final Long secondInNano = 1000_000_000l;
+
     protected CoordinatePlane planeToRender;
     protected plane.Area cameraSight;
     protected Dimension screenResolution;
+
+
+    protected int fpsWantedByUsr;
+    protected int fpsGeneratedWithinSecond;
+    protected double lastAmountOfFPS;
+    protected Long dateOfLastSecond;
+    protected Long currentFrameRenderingDate;
+
+    protected Boolean shouldDrawFPS;
+    protected Boolean shouldRun;
+    public Render(CoordinatePlane plane, plane.Area camera, int xRes, int yRes, int fps,boolean shouldDrawFPS)
+
     public MouseMotionSpeed mouseMotionSpeed;
 
     public Render(CoordinatePlane plane, plane.Area camera, int xRes, int yRes)
+
     {
         this.planeToRender=plane;
         this.cameraSight=camera;
         this.screenResolution = new Dimension(xRes,yRes);
+
+        this.fpsWantedByUsr=fps;
+        this.dateOfLastSecond=System.nanoTime();
+        this.shouldRun=true;
+        this.shouldDrawFPS=shouldDrawFPS;
+    }
+    public Render(CoordinatePlane plane, plane.Area camera, int xRes, int yRes)
+    {
+        this(plane,camera,xRes,yRes,60,true);
 
         this.mouseMotionSpeed = new MouseMotionSpeed();
         addMouseMotionListener(mouseMotionSpeed);
     }
     @Override
     public void run() {
-//        double factor = 0.1;
-        while(true)
+        while(shouldRun)
         {
-           // moveCamera(new plane.Vector(0.1,0.5));
-            repaint();
             try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
+                generateGraphicsWithWantedFPS();
+            } catch (RenderException e) {
                 e.printStackTrace();
+                shouldRun=false;
             }
+        }
+    }
+    protected void generateGraphicsWithWantedFPS() throws RenderException
+    {
+        startTimeMeasurement();
+        repaint();
+        waitIfNeed();
+        updateFPSData();
+    }
+    void startTimeMeasurement()
+    {
+        this.currentFrameRenderingDate=System.nanoTime();
+    }
+    void waitIfNeed() throws RenderException
+    {
+        Long timeElapsedToRenderAFrame = System.nanoTime()-currentFrameRenderingDate;
+        if(timeElapsedToRenderAFrame*(fpsWantedByUsr/secondInNano)>secondInNano)
+        {
+            throw new RenderException("too little time to generate one frame");
+        }
+        else
+        {
+           if(timeElapsedToRenderAFrame>secondInNano)
+           {
+              throw new RenderException("too little time to generate frames");
+           }
+           int amountOfRemainingFramesToRenderWithinSecond = fpsWantedByUsr-fpsGeneratedWithinSecond;
+           Long remainingTime=secondInNano-(System.nanoTime()-dateOfLastSecond);
+           remainingTime-=((fpsWantedByUsr/secondInNano)*amountOfRemainingFramesToRenderWithinSecond*timeElapsedToRenderAFrame);
+           if(amountOfRemainingFramesToRenderWithinSecond>0)
+           {
+               remainingTime/=amountOfRemainingFramesToRenderWithinSecond;
+           }
+           try {
+                Thread.sleep(Math.abs(remainingTime/1000000));
+           }catch (InterruptedException e) {
+                e.printStackTrace();
+           }
+        }
+    }
+    void updateFPSData()
+    {
+        Long deltaFromLastFrame = System.nanoTime()-dateOfLastSecond;
+        if(deltaFromLastFrame>secondInNano)
+        {
+            lastAmountOfFPS=((double)fpsGeneratedWithinSecond)/((double)deltaFromLastFrame/secondInNano);
+            fpsGeneratedWithinSecond=0;
+            dateOfLastSecond=System.nanoTime();
+        }
+        fpsGeneratedWithinSecond+=1;
+    }
+    void drawFPS(boolean shouldDrawFPS, Graphics g)
+    {
+        if(shouldDrawFPS)
+        {
+            g.drawString(String.format("%.2f FPS",lastAmountOfFPS),10,20);
         }
     }
     void moveCamera(plane.Vector directionOfMovement)
@@ -77,20 +155,24 @@ public class Render extends JPanel implements Runnable
     {
         super.paintComponent(g);
         renderGraphics(g);
+        drawFPS(this.shouldDrawFPS,g);
     }
-    //TEST TEST TEST TEST TEST TEST TEST
-    public static void main(String [] args)
+}
+
+class RenderException extends Exception
+{
+    protected String messageToUser;
+    RenderException(String messageToUser)
     {
-        JFrame some = new JFrame("test");
-        CoordinatePlane p = new CoordinatePlane();
-        p.addObjectToPlane(new ObjectInCoordinateSystem(new objects2D.Puck(2),new Point(0.1,0.1)));
-        p.addObjectToPlane(new ObjectInCoordinateSystem(new objects2D.Paddle(2.0,2.0),new Point(0.2,0.2)));
-        Render r = new Render(p,new Area(new Point(-10,-10),50,50),500,500);
-        some.add(r);
-        some.setVisible(true);
-        some.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        some.setSize(new Dimension(500,500));
-        new Thread(r).start();
+        this.messageToUser=messageToUser;
     }
-    //END OF TEST                 END OF TEST
+    RenderException()
+    {
+        this.messageToUser="Undefined Render Exception";
+    }
+    @Override
+    public String getMessage()
+    {
+        return this.messageToUser;
+    }
 }

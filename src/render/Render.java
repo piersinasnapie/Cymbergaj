@@ -1,5 +1,6 @@
 package render;
 
+import engine.MouseMotionSpeed;
 import plane.Area;
 import plane.CoordinatePlane;
 import plane.ObjectInCoordinateSystem;
@@ -17,6 +18,7 @@ public class Render extends JPanel implements Runnable
     protected plane.Area cameraSight;
     protected Dimension screenResolution;
 
+
     protected int fpsWantedByUsr;
     protected int fpsGeneratedWithinSecond;
     protected double lastAmountOfFPS;
@@ -26,10 +28,16 @@ public class Render extends JPanel implements Runnable
     protected Boolean shouldDrawFPS;
     protected Boolean shouldRun;
     public Render(CoordinatePlane plane, plane.Area camera, int xRes, int yRes, int fps,boolean shouldDrawFPS)
+
+    public MouseMotionSpeed mouseMotionSpeed;
+
+    public Render(CoordinatePlane plane, plane.Area camera, int xRes, int yRes)
+
     {
         this.planeToRender=plane;
         this.cameraSight=camera;
         this.screenResolution = new Dimension(xRes,yRes);
+
         this.fpsWantedByUsr=fps;
         this.dateOfLastSecond=System.nanoTime();
         this.shouldRun=true;
@@ -38,6 +46,9 @@ public class Render extends JPanel implements Runnable
     public Render(CoordinatePlane plane, plane.Area camera, int xRes, int yRes)
     {
         this(plane,camera,xRes,yRes,60,true);
+
+        this.mouseMotionSpeed = new MouseMotionSpeed();
+        addMouseMotionListener(mouseMotionSpeed);
     }
     @Override
     public void run() {

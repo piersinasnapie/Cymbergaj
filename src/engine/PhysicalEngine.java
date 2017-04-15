@@ -123,7 +123,6 @@ public class PhysicalEngine implements Runnable, Colider
         }
     }
 
-
     // Test
     public static void main(String[] args)
     {

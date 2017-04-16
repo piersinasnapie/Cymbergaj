@@ -1,13 +1,7 @@
 package engine;
 
 import objects2D.Puck;
-import plane.Area;
-import plane.CoordinatePlane;
-import plane.Movable;
-import plane.ObjectInCoordinateSystem;
-import plane.PhysicalObject;
-import plane.Point;
-import plane.Vector;
+import plane.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,8 +68,39 @@ public class PhysicalEngine implements Runnable, Colider
     {
         object1.updateDirection(object1.getDirection().multiply(-1));
         object2.updateDirection(object2.getDirection().multiply(-1));
+        resolveOverlapping(object1,object2);
     }
+    double getDistance(double firstCoordinate,double secondCoordinate)
+    {
+        return Math.abs(secondCoordinate-firstCoordinate);
+    }
+    void resolveOverlapping(Movable objectToMove, Movable staticObject)
+    {
 
+        double x;
+        double y;
+        double xLeftDistanceFrom1To2 = getDistance(objectToMove.getLeftUpper().getX(),staticObject.getLeftUpper().getX());
+        double xRightDistanceFrom1To2 = getDistance(objectToMove.getRightUpper().getX(),staticObject.getLeftUpper().getX());
+        if(xLeftDistanceFrom1To2 < xRightDistanceFrom1To2)
+        {
+            x=staticObject.getPoint().getX()-objectToMove.getArea().getWidth();
+        }
+        else
+        {
+            x=staticObject.getPoint().getX()+staticObject.getArea().getWidth();
+        }
+        double yLeftDistanceFrom1To2 = getDistance(objectToMove.getLeftUpper().getY(),staticObject.getLeftUpper().getY());
+        double yRightDistanceFrom1To2 = getDistance(objectToMove.getRightUpper().getY(),staticObject.getLeftUpper().getY());
+        if(yLeftDistanceFrom1To2 < yRightDistanceFrom1To2)
+        {
+            y=staticObject.getPoint().getY()-objectToMove.getArea().getHeight();
+        }
+        else
+        {
+            y=staticObject.getPoint().getY()+staticObject.getArea().getHeight();
+        }
+        objectToMove.updatePoint(new Point(x,y));
+    }
     private void searchColision()
     {
         Map<Movable,Boolean> resolvedCollisionMap = new HashMap<>();

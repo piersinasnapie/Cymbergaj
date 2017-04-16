@@ -65,7 +65,16 @@ public class ObjectInCoordinateSystem implements Movable
     {
         this.physicalObject.vector.multiply(v);
     }
-
+    @Override
+    public Point getRightUpper()
+    {
+        return new Point(this.shape.width+this.getPoint().getX(),this.getPoint().getY());
+    }
+    @Override
+    public Point getLeftUpper()
+    {
+        return this.getPoint();
+    }
     @Override
     public void updateDirection(Vector vector)
     {

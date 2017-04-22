@@ -13,4 +13,5 @@ public interface Movable
     void updateDirection(Vector vector);
     Area getArea();
     Shape getShape();
+    State getState();
 }

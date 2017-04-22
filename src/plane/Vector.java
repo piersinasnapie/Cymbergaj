@@ -56,6 +56,18 @@ public class Vector
     public Vector getXComponent() { return new Vector(xBegin,0,xEnd,0); }
     public Vector getYComponent() { return new Vector(0,yBegin,0,yEnd); }
 
+    public Vector reverseX()
+    {
+        this.xEnd = -1*(xEnd - xBegin) + xBegin;
+        return this;
+    }
+
+    public Vector reverseY()
+    {
+        this.yEnd = -1*(yEnd - yBegin) + yBegin;
+        return this;
+    }
+
     public static Vector add(Vector v1, Vector v2)
     {
         double xBegin = v1.xBegin;

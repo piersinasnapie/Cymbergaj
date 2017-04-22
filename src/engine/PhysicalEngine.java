@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PhysicalEngine implements Runnable, Colider
+public class PhysicalEngine implements Runnable
 {
     private boolean isWorking;
 
@@ -43,7 +43,7 @@ public class PhysicalEngine implements Runnable, Colider
             {
                 searchColision();
                 moveObjects();
-                Thread.sleep(20);
+                Thread.sleep(5);
             }
         }
         catch (InterruptedException e){ e.printStackTrace(); }
@@ -72,8 +72,20 @@ public class PhysicalEngine implements Runnable, Colider
 
     void resolveColision(Movable object1, Movable object2)
     {
-        object1.updateDirection(object1.getDirection().multiply(-1));
-        object2.updateDirection(object2.getDirection().multiply(-1));
+        Flank flank = Colider.flankColiding(object1,object2);
+        System.out.println(flank);
+        if(flank == Flank.LEFT || flank == Flank.RIGHT)
+        {
+            object1.updateDirection(object1.getDirection().reverseX());
+            object2.updateDirection(object2.getDirection().reverseX());
+        }
+        else if(flank == Flank.BOTTOM || flank == Flank.TOP)
+        {
+            object1.updateDirection(object1.getDirection().reverseY());
+            object2.updateDirection(object2.getDirection().reverseY());
+        }
+//        object1.updateDirection(object1.getDirection().multiply(-1));
+//        object2.updateDirection(object2.getDirection().multiply(-1));
     }
 
     private void searchColision()
@@ -109,8 +121,7 @@ public class PhysicalEngine implements Runnable, Colider
         }
     }
 
-    @Override
-    public boolean colisionDetected(Movable object1, Movable object2)
+    private boolean colisionDetected(Movable object1, Movable object2)
     {
         synchronized (object1)
         {
@@ -127,7 +138,7 @@ public class PhysicalEngine implements Runnable, Colider
         CoordinatePlane cp = new CoordinatePlane();
 
         ObjectInCoordinateSystem object1 = new ObjectInCoordinateSystem(new Puck(20));
-        ObjectInCoordinateSystem object2 = new ObjectInCoordinateSystem(new Puck(20), new PhysicalObject(new Vector(1,1),0.9), new Point(5,5));
+        ObjectInCoordinateSystem object2 = new ObjectInCoordinateSystem(new Puck(20), new PhysicalObject(new Vector(1,1),0.9), new Point(5,5), plane.State.MOVING);
 
         cp.addObjectToPlane(object1,object2);
 

@@ -45,9 +45,9 @@ public class MouseMotionSpeed implements MouseMotionListener, Runnable
                 double x = current.getX()-object.getArea().getWidth()/2;
                 double y = current.getY()-object.getArea().getHeight()/2;
 
-                System.out.println("begin" + object.getPoint());
+//                System.out.println("begin" + object.getPoint());
                 object.updatePoint(new plane.Point(x,y));
-                System.out.println("begin" + object.getPoint());
+//                System.out.println("begin" + object.getPoint());
             }
         }
     }
@@ -74,7 +74,7 @@ public class MouseMotionSpeed implements MouseMotionListener, Runnable
         {
             this.current = Render.render.parseAwtPoint(me.getPoint());
             Thread.sleep(0);
-            System.out.println("> current: " + this.current);
+//            System.out.println("> current: " + this.current);
         }
         catch (InterruptedException exception) { exception.printStackTrace(); }
     }

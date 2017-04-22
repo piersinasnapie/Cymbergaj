@@ -11,6 +11,7 @@ import plane.CoordinatePlane;
 import plane.ObjectInCoordinateSystem;
 import plane.PhysicalObject;
 import plane.Point;
+import plane.State;
 import plane.Vector;
 import render.Render;
 
@@ -23,9 +24,6 @@ public class Main
     {
         CoordinatePlane coordinatePlane = new CoordinatePlane();
 
-        Obstacle o1 = new Obstacle(2,10,Color.DARK_GRAY);
-        Obstacle o2 = new Obstacle(2,10,Color.DARK_GRAY);
-
 
         Shape shape = new Puck(5, Color.blue);
         Shape shape2 = new Puck(5, Color.red);
@@ -33,23 +31,32 @@ public class Main
 
         Vector v = new Vector(0.1,0);
         PhysicalObject physicalObject = new PhysicalObject(v);
-        PhysicalObject po2 = new PhysicalObject(new Vector(-0.1,0));
+        PhysicalObject po2 = new PhysicalObject(new Vector(-0.1,0.1));
 
 //        ObjectInCoordinateSystem object = new ObjectInCoordinateSystem(shape,physicalObject,new Point(0,0));
-        ObjectInCoordinateSystem object2 = new ObjectInCoordinateSystem(shape2,po2,new Point(20,0));
-
-        ObjectInCoordinateSystem obstacle1 = new ObjectInCoordinateSystem(o1, new PhysicalObject(),new Point(-10,0));
-        ObjectInCoordinateSystem obstacle2 = new ObjectInCoordinateSystem(o2, new PhysicalObject(),new Point(10,0));
+        ObjectInCoordinateSystem puck = new ObjectInCoordinateSystem(shape2,po2,new Point(10,0), State.MOVING);
 
 
-//        coordinatePlane.addObjectToPlane(obstacle1,obstacle2);
         Render render = new Render(coordinatePlane,new Area(new Point(-20,-20),50,50),600,600);
 
-//        coordinatePlane.addObjectToPlane(object,object2);
-        ObjectInCoordinateSystem paddle = new ObjectInCoordinateSystem(shape3,new PhysicalObject(),new Point(10,10));
+//        coordinatePlane.addObjectToPlane(object,puck);
+        ObjectInCoordinateSystem paddle = new ObjectInCoordinateSystem(shape3,new PhysicalObject(),new Point(10,10), State.STATIC);
 
-        coordinatePlane.addObjectToPlane(paddle,object2);
 
+        // walls
+
+        Obstacle verticalWall = new Obstacle(2,70, Color.cyan);
+        Obstacle horizontalWall = new Obstacle(70,2, Color.cyan);
+        PhysicalObject physicalWall = new PhysicalObject(new Vector(),0);
+
+        ObjectInCoordinateSystem left = new ObjectInCoordinateSystem(verticalWall,physicalWall,new Point(-20,-20), State.STATIC);
+        ObjectInCoordinateSystem right = new ObjectInCoordinateSystem(verticalWall,physicalWall,new Point(21,-20), State.STATIC);
+        ObjectInCoordinateSystem up = new ObjectInCoordinateSystem(horizontalWall,physicalWall,new Point(-16,-20), State.STATIC);
+        ObjectInCoordinateSystem down = new ObjectInCoordinateSystem(horizontalWall,physicalWall,new Point(-16,16), State.STATIC);
+
+        coordinatePlane.addObjectToPlane(left,right,up,down);
+
+        coordinatePlane.addObjectToPlane(puck,paddle);
         MouseMotionSpeed mouseMotionSpeed = new MouseMotionSpeed(paddle);
 
         Thread engineThread = new Thread(PhysicalEngine.getPhysicalEngine(coordinatePlane));
@@ -70,9 +77,9 @@ public class Main
 
         try
         {
+            renderThread.start();
             Thread.sleep(1000);
             engineThread.start();
-            renderThread.start();
             mouseThread.start();
         }
         catch (InterruptedException e){ e.printStackTrace(); }

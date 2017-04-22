@@ -8,22 +8,24 @@ public class ObjectInCoordinateSystem implements Movable
     private Shape shape;
     private PhysicalObject physicalObject;
     private Point point;
+    private State state;
 
     public ObjectInCoordinateSystem(Shape shape)
     {
-        this(shape,new PhysicalObject(), new Point());
+        this(shape,new PhysicalObject(), new Point(), State.STATIC);
     }
 
-    public ObjectInCoordinateSystem(Shape shape, Point point)
+    public ObjectInCoordinateSystem(Shape shape, Point point, State state)
     {
-        this(shape, new PhysicalObject(), point);
+        this(shape, new PhysicalObject(), point, state);
     }
 
-    public ObjectInCoordinateSystem(Shape shape, PhysicalObject physicalObject, Point point)
+    public ObjectInCoordinateSystem(Shape shape, PhysicalObject physicalObject, Point point, State state)
     {
         this.shape = shape;
         this.physicalObject = physicalObject;
         this.point = point;
+        this.state = state;
     }
 
     public double getWidth(){ return this.shape.width; }
@@ -93,9 +95,15 @@ public class ObjectInCoordinateSystem implements Movable
         return this.shape;
     }
 
+    @Override
+    public State getState()
+    {
+        return this.state;
+    }
+
     public String toString()
     {
-        return "Object :: origin point: " + point + ",\n    " + physicalObject;
+        return "Object :: origin point: " + point + ",\n    " + physicalObject + "State: " + state;
     }
 
     // test

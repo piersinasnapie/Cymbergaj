@@ -1,13 +1,19 @@
 package engine;
 
 import objects2D.Puck;
-import plane.*;
+import plane.Area;
+import plane.CoordinatePlane;
+import plane.Movable;
+import plane.ObjectInCoordinateSystem;
+import plane.PhysicalObject;
+import plane.Point;
+import plane.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PhysicalEngine implements Runnable, Colider
+public class PhysicalEngine implements Runnable
 {
     private boolean isWorking;
 
@@ -37,7 +43,7 @@ public class PhysicalEngine implements Runnable, Colider
             {
                 searchColision();
                 moveObjects();
-                Thread.sleep(20);
+                Thread.sleep(5);
             }
         }
         catch (InterruptedException e){ e.printStackTrace(); }
@@ -66,41 +72,22 @@ public class PhysicalEngine implements Runnable, Colider
 
     void resolveColision(Movable object1, Movable object2)
     {
-        object1.updateDirection(object1.getDirection().multiply(-1));
-        object2.updateDirection(object2.getDirection().multiply(-1));
-        resolveOverlapping(object1,object2);
+        Flank flank = Colider.flankColiding(object1,object2);
+        System.out.println(flank);
+        if(flank == Flank.LEFT || flank == Flank.RIGHT)
+        {
+            object1.updateDirection(object1.getDirection().reverseX());
+            object2.updateDirection(object2.getDirection().reverseX());
+        }
+        else if(flank == Flank.BOTTOM || flank == Flank.TOP)
+        {
+            object1.updateDirection(object1.getDirection().reverseY());
+            object2.updateDirection(object2.getDirection().reverseY());
+        }
+//        object1.updateDirection(object1.getDirection().multiply(-1));
+//        object2.updateDirection(object2.getDirection().multiply(-1));
     }
-    double getDistance(double firstCoordinate,double secondCoordinate)
-    {
-        return Math.abs(secondCoordinate-firstCoordinate);
-    }
-    void resolveOverlapping(Movable objectToMove, Movable staticObject)
-    {
 
-        double x;
-        double y;
-        double xLeftDistanceFrom1To2 = getDistance(objectToMove.getLeftUpper().getX(),staticObject.getLeftUpper().getX());
-        double xRightDistanceFrom1To2 = getDistance(objectToMove.getRightUpper().getX(),staticObject.getLeftUpper().getX());
-        if(xLeftDistanceFrom1To2 < xRightDistanceFrom1To2)
-        {
-            x=staticObject.getPoint().getX()-objectToMove.getArea().getWidth();
-        }
-        else
-        {
-            x=staticObject.getPoint().getX()+staticObject.getArea().getWidth();
-        }
-        double yLeftDistanceFrom1To2 = getDistance(objectToMove.getLeftUpper().getY(),staticObject.getLeftUpper().getY());
-        double yRightDistanceFrom1To2 = getDistance(objectToMove.getRightUpper().getY(),staticObject.getLeftUpper().getY());
-        if(yLeftDistanceFrom1To2 < yRightDistanceFrom1To2)
-        {
-            y=staticObject.getPoint().getY()-objectToMove.getArea().getHeight();
-        }
-        else
-        {
-            y=staticObject.getPoint().getY()+staticObject.getArea().getHeight();
-        }
-        objectToMove.updatePoint(new Point(x,y));
-    }
     private void searchColision()
     {
         Map<Movable,Boolean> resolvedCollisionMap = new HashMap<>();
@@ -134,8 +121,7 @@ public class PhysicalEngine implements Runnable, Colider
         }
     }
 
-    @Override
-    public boolean colisionDetected(Movable object1, Movable object2)
+    private boolean colisionDetected(Movable object1, Movable object2)
     {
         synchronized (object1)
         {
@@ -152,7 +138,7 @@ public class PhysicalEngine implements Runnable, Colider
         CoordinatePlane cp = new CoordinatePlane();
 
         ObjectInCoordinateSystem object1 = new ObjectInCoordinateSystem(new Puck(20));
-        ObjectInCoordinateSystem object2 = new ObjectInCoordinateSystem(new Puck(20), new PhysicalObject(new Vector(1,1),0.9), new Point(5,5));
+        ObjectInCoordinateSystem object2 = new ObjectInCoordinateSystem(new Puck(20), new PhysicalObject(new Vector(1,1),0.9), new Point(5,5), plane.State.MOVING);
 
         cp.addObjectToPlane(object1,object2);
 

@@ -15,4 +15,5 @@ public interface Movable
     Point getLeftUpper();
     Area getArea();
     Shape getShape();
+    State getState();
 }

@@ -6,7 +6,7 @@ public class Colider
 {
     public static Flank flankColiding(Movable source, Movable intruder)
     {
-        final double multiplier = 0.9;
+        final double multiplier = 0.85;
 
         double sourceX = source.getPoint().getX();
         double sourceY = source.getPoint().getY();
@@ -23,15 +23,15 @@ public class Colider
         double intruderEndX = intruderWidth + intruderX;
         double intruderEndY = intruderHeight + intruderY;
 
-        boolean rightColiding = intruderX > sourceX+sourceWidth*multiplier && intruderX <= sourceEndX;
-        boolean leftColiding = (intruderEndX < sourceEndX-sourceWidth*multiplier) && (intruderEndX >= sourceX);
-        boolean bottomColiding = intruderY > sourceY+sourceHeight*multiplier && intruderY <= sourceEndY;
-        boolean topColiding = (intruderEndY < sourceEndY-sourceHeight*multiplier) && (intruderEndY >= sourceY);
+        boolean rightColiding = intruderX > sourceX+sourceWidth*multiplier && intruderX < sourceEndX;
+        boolean leftColiding = (intruderEndX < sourceEndX-sourceWidth*multiplier) && (intruderEndX > sourceX);
+        boolean bottomColiding = intruderY > sourceY+sourceHeight*multiplier && intruderY < sourceEndY;
+        boolean topColiding = (intruderEndY < sourceEndY-sourceHeight*multiplier) && (intruderEndY > sourceY);
 
-        boolean intruderYSource =  (intruderY <= sourceEndY && intruderY >= sourceY) || (intruderEndY <= sourceEndY && intruderEndY >= sourceY);
-        boolean sourceYIntruder = (sourceY <= intruderEndY && sourceY >= intruderY) || (sourceEndY <= intruderEndY && sourceEndY >= intruderY);
-        boolean intruderXSource = (intruderX <= sourceEndX && intruderX >= sourceX) || (intruderEndX <= sourceEndX && intruderEndY >= sourceX);
-        boolean sourceXIntruder = (sourceX <= intruderEndX && sourceX >= intruderX) || (sourceEndX <= intruderEndX && sourceEndX >= intruderX);
+        boolean intruderYSource =  (intruderY < sourceEndY && intruderY > sourceY) || (intruderEndY < sourceEndY && intruderEndY > sourceY);
+        boolean sourceYIntruder = (sourceY < intruderEndY && sourceY > intruderY) || (sourceEndY < intruderEndY && sourceEndY > intruderY);
+        boolean intruderXSource = (intruderX < sourceEndX && intruderX > sourceX) || (intruderEndX < sourceEndX && intruderEndY > sourceX);
+        boolean sourceXIntruder = (sourceX < intruderEndX && sourceX > intruderX) || (sourceEndX < intruderEndX && sourceEndX > intruderX);
 
         if(rightColiding && (intruderYSource || sourceYIntruder))
         {
@@ -50,10 +50,5 @@ public class Colider
             return Flank.TOP;
         }
         return null;
-    }
-
-    public static void main(String[] args)
-    {
-
     }
 }

@@ -11,6 +11,8 @@ public interface Movable
     void updateVelocity();
     void setVelocity(double v);
     void updateDirection(Vector vector);
+    Point getRightUpper();
+    Point getLeftUpper();
     Area getArea();
     Shape getShape();
     State getState();

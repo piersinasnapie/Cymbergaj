@@ -80,22 +80,22 @@ public class Render extends JPanel implements Runnable
         }
         else
         {
-           if(timeElapsedToRenderAFrame>secondInNano)
-           {
-              throw new RenderException("too little time to generate frames");
-           }
-           int amountOfRemainingFramesToRenderWithinSecond = fpsWantedByUsr-fpsGeneratedWithinSecond;
-           Long remainingTime=secondInNano-(System.nanoTime()-dateOfLastSecond);
-           remainingTime-=((fpsWantedByUsr/secondInNano)*amountOfRemainingFramesToRenderWithinSecond*timeElapsedToRenderAFrame);
-           if(amountOfRemainingFramesToRenderWithinSecond>0)
-           {
-               remainingTime/=amountOfRemainingFramesToRenderWithinSecond;
-           }
-           try {
+            if(timeElapsedToRenderAFrame>secondInNano)
+            {
+                throw new RenderException("too little time to generate frames");
+            }
+            int amountOfRemainingFramesToRenderWithinSecond = fpsWantedByUsr-fpsGeneratedWithinSecond;
+            Long remainingTime=secondInNano-(System.nanoTime()-dateOfLastSecond);
+            remainingTime-=((fpsWantedByUsr/secondInNano)*amountOfRemainingFramesToRenderWithinSecond*timeElapsedToRenderAFrame);
+            if(amountOfRemainingFramesToRenderWithinSecond>0)
+            {
+                remainingTime/=amountOfRemainingFramesToRenderWithinSecond;
+            }
+            try {
                 Thread.sleep(Math.abs(remainingTime/1000000));
-           }catch (InterruptedException e) {
+            }catch (InterruptedException e) {
                 e.printStackTrace();
-           }
+            }
         }
     }
     void updateFPSData()

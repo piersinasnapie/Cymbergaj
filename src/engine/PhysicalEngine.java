@@ -1,13 +1,6 @@
 package engine;
 
-import objects2D.Puck;
-import plane.Area;
-import plane.CoordinatePlane;
-import plane.Movable;
-import plane.ObjectInCoordinateSystem;
-import plane.PhysicalObject;
-import plane.Point;
-import plane.Vector;
+import plane.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +36,7 @@ public class PhysicalEngine implements Runnable
             {
                 searchColision();
                 moveObjects();
-                Thread.sleep(5);
+                Thread.sleep(2);
             }
         }
         catch (InterruptedException e){ e.printStackTrace(); }
@@ -55,7 +48,11 @@ public class PhysicalEngine implements Runnable
         {
             synchronized (object)
             {
-                object.updatePoint(object.getPoint().add(object.getDirection().getEndPoint()));
+                Vector vector = object.getDirection();
+                if (vector.length() > CoordinatePlane.maxVectorLength) {
+                    vector.multiply(-CoordinatePlane.maxVectorLength / vector.length());
+                }
+                object.updatePoint(object.getPoint().add(vector.getEndPoint()));
                 slowDownObject(object);
             }
         }
@@ -69,24 +66,61 @@ public class PhysicalEngine implements Runnable
         }
         else object.setVelocity(0);
     }
-
     void resolveColision(Movable object1, Movable object2)
     {
-        Flank flank = Colider.flankColiding(object1,object2);
-        System.out.println(flank);
-        if(flank == Flank.LEFT || flank == Flank.RIGHT)
+        Movable objectToManipulate;
+        Movable staticObject;
+        if(object1.getState() == State.MOVING){
+            objectToManipulate=object1;
+            staticObject=object2;
+        }
+        else
         {
+            objectToManipulate=object2;
+            staticObject=object1;
+        }
+        Flank flank = Colider.flankColiding(staticObject,objectToManipulate);
+        System.out.println(flank);
+        double x;
+        double y;
+        if(flank == Flank.LEFT)
+        {
+            x=staticObject.getLeftUpper().getX()-objectToManipulate.getArea().getWidth();
+            y=objectToManipulate.getPoint().getY();
+            objectToManipulate.updatePoint(new plane.Point(x,y));
             object1.updateDirection(object1.getDirection().reverseX());
             object2.updateDirection(object2.getDirection().reverseX());
+            return;
         }
-        else if(flank == Flank.BOTTOM || flank == Flank.TOP)
+        if(flank == Flank.RIGHT)
         {
+            x=staticObject.getLeftUpper().getX()+staticObject.getArea().getWidth();
+            y=objectToManipulate.getPoint().getY();
+            objectToManipulate.updatePoint(new plane.Point(x,y));
+            object1.updateDirection(object1.getDirection().reverseX());
+            object2.updateDirection(object2.getDirection().reverseX());
+            return;
+        }
+        if(flank == Flank.TOP)
+        {
+            x=objectToManipulate.getPoint().getX();
+            y=staticObject.getPoint().getY()-objectToManipulate.getArea().getHeight();
+            objectToManipulate.updatePoint(new plane.Point(x,y));
             object1.updateDirection(object1.getDirection().reverseY());
             object2.updateDirection(object2.getDirection().reverseY());
+            return;
         }
-//        object1.updateDirection(object1.getDirection().multiply(-1));
-//        object2.updateDirection(object2.getDirection().multiply(-1));
+        if(flank == Flank.BOTTOM)
+        {
+            x=objectToManipulate.getPoint().getX();
+            y=staticObject.getPoint().getY()+staticObject.getArea().getHeight();
+            objectToManipulate.updatePoint(new plane.Point(x,y));
+            object1.updateDirection(object1.getDirection().reverseY());
+            object2.updateDirection(object2.getDirection().reverseY());
+            return;
+        }
     }
+
 
     private void searchColision()
     {
@@ -95,53 +129,42 @@ public class PhysicalEngine implements Runnable
         {
             resolvedCollisionMap.put(movableObject,false);
         }
-        for (Movable object1 : objects)
+        for (Movable object : objects)
         {
-            for (Movable object2 : objects)
+            Movable collidingObject = isColliding(object);
+            if (collidingObject!=null && !resolvedCollisionMap.get(object) && !resolvedCollisionMap.get(collidingObject))
             {
-                if(object1 != object2)
+                System.out.println("†††\nCOLISION COLISION COLISION COLISION COLISION COLISION \n†††");
+                synchronized(object)
                 {
-                    if (colisionDetected(object1, object2) && !resolvedCollisionMap.get(object1) && !resolvedCollisionMap.get(object2))
+                    synchronized(collidingObject)
                     {
-                        System.out.println("†††\nCOLISION COLISION COLISION COLISION COLISION COLISION \n†††");
-                        synchronized(object1)
-                        {
-                            synchronized(object2)
-                            {
-                                resolveColision(object1, object2);
-                                resolvedCollisionMap.replace(object1, true);
-                                resolvedCollisionMap.replace(object2, true);
-                            }
-                        }
-                        System.out.println("1. " + object1);
-                        System.out.println("2. " + object2);
+                        resolveColision(object, collidingObject);
+                        resolvedCollisionMap.replace(object, true);
+                        resolvedCollisionMap.replace(collidingObject, true);
                     }
+                }
+                System.out.println("1. " + object);
+                System.out.println("2. " + collidingObject);
+            }
+        }
+    }
+
+    private Movable isColliding(Movable object){
+        for (Movable object2 : objects)
+        {
+            if(object != object2)
+            {
+                if (collisionDetected(object, object2))
+                {
+                    return object2;
                 }
             }
         }
+        return null;
     }
-
-    private boolean colisionDetected(Movable object1, Movable object2)
+    private boolean collisionDetected(Movable object1, Movable object2)
     {
-        synchronized (object1)
-        {
-            synchronized (object2)
-            {
-                return Area.intersect(object1.getArea(), object2.getArea());
-            }
-        }
-    }
-
-    // Test
-    public static void main(String[] args)
-    {
-        CoordinatePlane cp = new CoordinatePlane();
-
-        ObjectInCoordinateSystem object1 = new ObjectInCoordinateSystem(new Puck(20));
-        ObjectInCoordinateSystem object2 = new ObjectInCoordinateSystem(new Puck(20), new PhysicalObject(new Vector(1,1),0.9), new Point(5,5), plane.State.MOVING);
-
-        cp.addObjectToPlane(object1,object2);
-
-        new Thread(PhysicalEngine.getPhysicalEngine(cp)).start();
+        return Area.intersect(object1.getArea(), object2.getArea());
     }
 }

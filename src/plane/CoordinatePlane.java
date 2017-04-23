@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class CoordinatePlane
 {
-    public static final double maxVectorLength = 1;
+    public static final double maxVectorLength = 0.08;
     protected ArrayList<ObjectInCoordinateSystem> objectsInPlane;
 
     public CoordinatePlane()
